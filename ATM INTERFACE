@@ -1,0 +1,77 @@
+import java.util.Scanner;
+class BankAccount{
+    private double balance;
+    public BankAccount(double initialBalance){
+        this.balance=initialBalance;
+    }
+    public double getBal(){
+        return balance;
+    }
+    public void deposit(double amt){
+        if(amt>0){
+            balance+=amt;
+            System.out.println("Deposit of $" + amt +" successful. Current balance: $" + balance);
+        } else {
+            System.out.println("Invalid deposit amt.");
+        }
+    }
+    public void withdraw(double amt){
+        if(amt>0&&amt<=balance){
+            balance-=amt;
+            System.out.println("Withdrawal of $" + amt + "successful. Current balance: $" + balance);
+        }else{
+            System.out.println("Invalid Withdrawal amt or insufficient balance.");
+        }
+    }
+}
+class ATM {
+    private BankAccount bA;
+    public ATM(BankAccount bA){
+        this.bA=bA;
+    }
+    public void displayMenu(){
+        System.out.println("ATM Menu:");
+        System.out.println("1. Check balance");
+        System.out.println("2. Deposit");
+        System.out.println("3. Withdraw");
+        System.out.println("4. Exit");
+    }
+    public void performTransaction(int choice, Scanner s){
+        switch (choice){
+            case 1:
+                System.out.println("Current balance: $" + bA.getBal());
+                break;
+            case 2:
+                System.out.print("Enter deposit amt: $");
+                double depositAmt=s.nextDouble();
+                bA.deposit(depositAmt);
+                break;
+            case 3:
+                System.out.print("Enter withdrawal amt: $");
+                double withdrawalAmt=s.nextDouble();
+                bA.withdraw(withdrawalAmt);
+                break;
+            case 4:
+                System.out.println("Exiting ATM. Thank you.");
+                s.close();
+                System.exit(0);
+            default:
+            System.out.println("Invalid choice. Please select a valid option.");
+        }
+    }
+}
+public class ATM_Interface{
+    public static void main(String[] args){
+        Scanner s=new Scanner(System.in);
+        System.out.println("Enter initial acnt bal: $");
+        double initialBalance=s.nextDouble();
+        BankAccount bA=new BankAccount(initialBalance);
+        ATM atm=new ATM(bA);
+        while(true){
+            atm.displayMenu();
+            System.out.print("Select an option: ");
+            int choice=s.nextInt();
+            atm.performTransaction(choice,s);
+        }
+    }
+}
